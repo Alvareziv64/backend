@@ -1,24 +1,3 @@
-/*te ayudo un poco, en el constructor podes crear un contenedor: 
-this.produtos = [];
-y despues para guardar un producto el metodo: save(producto){
-this.produtos.push(producto);
-}
-
-obtener por id: getById(id){
-return this.produtos.find(el \=> el.id == id);
-}
-fijate que siempre lo buscamos en el array del constructor
-para borrar en lugar de usar find usas filter
-para borrar por id
-y para borrar todo le asignas a this.productos el valor []
-
-
-y para mostrar los productos:
-this.produtos.forEach(function(producto){
-console.log(producto);
-});
-
-*/
 
 class Contenedor {
     
