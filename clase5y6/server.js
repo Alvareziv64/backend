@@ -9,7 +9,11 @@ app.get("/home", webController.home);
 app.get("/about", webController.about);
 
 //apiController
-app.get("/products", apiController.products);
+app.get("/api/products", apiController.getProducts);
+app.get("/api/products/:id", apiController.getById);
+app.post("/api/products", apiController.postProducts);	
+app.delete("/api/products/:id", apiController.deleteById);
+app.put("/api/products/:id", apiController.putById);
 
 const port = 8080;
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
