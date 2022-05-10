@@ -7,16 +7,10 @@ class InventorysArchive {
     this.inventory = [];
   }
 
-  _save() {
-    const jsonProducts = JSON.stringify(this.inventory, null, 2);
-    return fs.promises.writeFile(this.rute, jsonProducts);
-  }
-
-  _read() {
-    return fs.promises.readFile(this.rute, "utf-8").then((data) => {
-      const arrayProducts = JSON.parse(data);
-      this.inventory = arrayProducts;
-    });
+  async _read() {
+    const data = await fs.promises.readFile(this.rute, "utf8");
+    this.inventory = JSON.parse(data);
+    return this.inventory;
   }
 
   async save(data) {
@@ -26,9 +20,9 @@ class InventorysArchive {
       data.price,
       data.thumbnail
     );
-    await this._read();
     this.inventory.push(product);
-    await this._save();
+    const JSONarchive = JSON.stringify(this.inventory, null, 2);
+    await fs.promises.writeFile(this.rute, JSONarchive);
   }
 
   async getAll() {
@@ -47,13 +41,10 @@ class InventorysArchive {
   }
 
   async deleteById(id) {
-    await this._read();
-    const indice = this.inventory.findIndex((product) => product.id === id);
-    if (indice !== -1) {
-      this.inventory.splice(indice, 1);
-      await this._save();
-    }
-  }
+    this.inventory = this.inventory.filter((product) => product.id != id);
+    await this.save(id);
+}
+
 }
 
 module.exports = InventorysArchive;

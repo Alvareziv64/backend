@@ -2,7 +2,7 @@ const InventorysArchive = require('./InventorysArchive');
 const InventorysMemo = require('./InventorysMemo');
 
 const main = async () => {
-    const inventory = new InventorysArchive("../clase5y6/_database/inventory.json");
+    const inventory = new InventorysArchive(".products.txt");
 
     const product1 = {
         id: 1,
@@ -31,11 +31,12 @@ const main = async () => {
 
     await inventory.save(product3);
 
-    //console.log(await inventory.getAll());
 
-    //await inventory.deleteById(2);
+    //await inventory.getAll()
 
-    //console.log(await inventory.getAll());
+    await inventory.deleteById(2);
+
+   // console.log(await inventory.getAll());
 
     
 
@@ -43,7 +44,7 @@ const main = async () => {
 
 
 
-//module.exports = {main}
+module.exports = {main}
 
 
 

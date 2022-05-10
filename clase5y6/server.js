@@ -10,7 +10,6 @@ app.get("/about", webController.about);
 
 //apiController
 app.get("/products", apiController.products);
-app.get("/random", apiController.random);
 
 const port = 8080;
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
