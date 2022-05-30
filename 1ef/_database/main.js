@@ -1,12 +1,11 @@
 const InventorysArchive = require('./InventorysArchive');
-const InventorysMemo = require('./InventorysMemo');
-
+  
 const main = async () => {
-    const inventory = new InventorysArchive("inventory.txt");
+    const inventory = new InventorysArchive("../clase5y6/_database/inventory.txt");
 
     const product1 = {
         id: 1,
-        title: "Laptop",
+        title: "Laptop",  
         price: 500,
         thumbnail: "img/laptop.jpg"
     }
@@ -30,14 +29,6 @@ const main = async () => {
     }
 
     await inventory.save(product3);
-
-
-    //await inventory.getAll()
-
-    await inventory.deleteById(2);
-
-   // console.log(await inventory.getAll());
-
     
 
 }

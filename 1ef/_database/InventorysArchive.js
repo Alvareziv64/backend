@@ -13,6 +13,29 @@ class InventorysArchive {
     return this.inventory;
   }
 
+  
+  async getAll() {
+    await this._read();
+    return [...this.inventory];
+  }
+  
+  async getById(id) {
+    await this._read();
+    return this.inventory.find((product) => product.id == id);
+  }
+  
+  async deleteAll() {
+    await this._read();
+    this.inventory = [];
+  }
+  
+  async deleteById(id) {
+    await this._read() 
+    const filtrado = this.inventory.filter((product) => product.id !== id); 
+    await fs.promises.writeFile(this.rute, JSON.stringify(filtrado)); 
+  }
+
+  
   async save(data) {
     const product = new Products(
       data.id,
@@ -24,27 +47,22 @@ class InventorysArchive {
     const JSONarchive = JSON.stringify(this.inventory, null, 2);
     await fs.promises.writeFile(this.rute, JSONarchive);
   }
+  
+  /*
+  async save(object) {
+    object.id = `${Date.now()}`;
+    let objects = await this.getAll();
+    if (objects.some(o => o.id == object.id)) return;
+    objects.push(object);
+    try {
+        fs.promises.writeFile(this.path, JSON.stringify(objects, null, 2));
+    } catch (error) {
+        throw new Error(`Error en guardar objeto de id ${object.id}`);
+    }
+    return object;
 
-  async getAll() {
-    await this._read();
-    return [...this.inventory];
-  }
-
-  async getById(id) {
-    await this._read();
-    return this.inventory.find((product) => product.id == id);
-  }
-
-  async deleteAll() {
-    await this._read();
-    this.inventory = [];
-  }
-
-  async deleteById(id) {
-    this.inventory = this.inventory.filter((product) => product.id != id);
-    await this.save(id);
-}
-
+}*/
+  
 }
 
 module.exports = InventorysArchive;
