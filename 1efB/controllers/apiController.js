@@ -1,6 +1,6 @@
 const InventorysArchive = require("../_database/InventorysArchive");
 const { main } = require("../_database/main");
-const inventory = new InventorysArchive("../1ef/_database/inventory.txt");
+const inventory = new InventorysArchive("../clase5y6/_database/inventory.txt");
 
 function generarId() {
   return `${Date.now()}`

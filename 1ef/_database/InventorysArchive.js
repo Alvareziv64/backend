@@ -1,6 +1,9 @@
 const fs = require("fs");
 const Products = require("./Products.js");
-
+/*const idRandom = () => {
+  return `${Date.now()}`;
+}*/
+ 
 class InventorysArchive {
   constructor(rute) {
     this.rute = rute;
@@ -37,16 +40,20 @@ class InventorysArchive {
 
   
   async save(data) {
-    const product = new Products(
+    /*const product = new Products(
       data.id,
       data.title,
       data.price,
       data.thumbnail
-    );
+    );*/
+    const product = data;
+    //product.id = idRandom;
     this.inventory.push(product);
-    const JSONarchive = JSON.stringify(this.inventory, null, 2);
-    await fs.promises.writeFile(this.rute, JSONarchive);
+    //const JSONarchive = JSON.stringify(this.inventory, null, 2);
+    //await fs.promises.writeFile(this.rute, JSONarchive);
+    return product;
   }
+
   
   /*
   async save(object) {

@@ -1,7 +1,7 @@
 const InventorysArchive = require('./InventorysArchive');
   
 const main = async () => {
-    const inventory = new InventorysArchive("../clase5y6/_database/inventory.txt");
+    const inventory = new InventorysArchive("../1ef/_database/inventory.txt");
 
     const product1 = {
         id: 1,
