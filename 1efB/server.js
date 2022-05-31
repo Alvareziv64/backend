@@ -3,6 +3,9 @@ const app = express();
 const { webController } = require("./controllers/webController");
 const { apiController } = require("./controllers/apiController");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //webController
 app.get("/", webController.root);
 app.get("/home", webController.home);

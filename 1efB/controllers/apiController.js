@@ -1,12 +1,8 @@
-const InventorysArchive = require("../_database/InventorysArchive");
-const { main } = require("../_database/main");
-const inventory = new InventorysArchive("../clase5y6/_database/inventory.txt");
-
-function generarId() {
-  return `${Date.now()}`
-}
+const { InventorysArchive } = require("../database/InventorysArchive");
+const inventory = new InventorysArchive("../database/inventory.txt");
 
 const apiController = {
+
   getProducts: (req, res) => {
     inventory.getAll().then((products) => {
       res.json(products);
@@ -21,30 +17,18 @@ const apiController = {
     } catch (error) {
       res.status(404).send({ error: error.message });
     }
-  },
+  }, 
 
   postProducts: async (req, res) => {
-    const data = req.body;
-    data.id = generarId();
-    try {
-      const product = await inventory.save(data);
-      res.json(product);
+    try { 
+      const data = req.body;
+      const newProduct = await inventory.save(data);
+    res.status(201).json(newProduct)
     } catch (error) {
-      res.status(500).send({ error: error.message });
+      res.status(500).send( { error: error.message });
     }
   },
 
-  /*
-    try{
-      const newProduct = await inventory.save(req.body);
-      res.status(201).json(newProduct);
-    } catch (error) {
-      res.status(400).send({ error: error.message });
-    }
-  },*/
-
-   /* inventory.save(req.body);
-    res.json(inventory);*/
 
   getById: (req, res) => {
     inventory.getById(req.params.id).then((product) => {
