@@ -41,6 +41,46 @@ const apiController = {
       res.json({ message: "Product updated" });
     });
   },
+
+  // Cart logic
+
+  createCart: (req, res) => {
+    inventory.createCart().then((cart) => {
+      res.json(cart);
+    });
+  },
+
+  postProductsInCart: (req, res) => {
+    const id = req.params.id_cart;
+    const productReq = req.body;
+    const product = productReq.id;
+    inventory.postProductsInCart(id, product).then(() => {
+      res.json({ message: "Product added to cart" });
+    });
+  },
+
+  getProductsInCart: (req, res) => {
+    const id = req.params.id_cart;
+    inventory.getProductsInCart(id).then((products) => {
+      res.json(products);
+    });
+  },
+
+  deleteProductInCart: (req, res) => {
+    const id = req.params.id_cart;
+    const productId = req.params.id_product;
+    inventory.deleteProductInCart(id, productId).then(() => {
+      res.json({ message: "Product deleted from cart" });
+    });
+  },
+
+  deleteCart: (req, res) => {
+    const id = req.params.id_cart;
+    inventory.deleteCart(id).then(() => {
+      res.json({ message: "Cart deleted" });
+    });
+  },
+
 };
 
 module.exports = { apiController };
