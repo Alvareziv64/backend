@@ -1,5 +1,5 @@
 const express = require("express");
-const { clienteSqlUser } = require("./clienteSql.js") ;
+const { clienteSql } = require("./clienteSql.js") ;
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
 
@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 const productos = [];
 //Chat
 const mensajes = [];
+
 //socket.io
 io.on("connection", (socket) => {
   socket.emit("mensajesActualizados", mensajes);
@@ -35,66 +36,72 @@ io.on("connection", (socket) => {
 });  
 
 //knex
-app.get("/api/personas", async (req, res) => {
+app.get("/api/products", async (req, res) => {
   try {
-    const personas = await clienteSqlUser.select("*").from("personas");
-    res.json(personas);
+    const allProducts = await clienteSql.select("*").from("products");
+    res.json(allProducts);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 });
 
-app.get("/api/personas/:id", async (req, res) => {
+app.get("/api/products/:id", async (req, res) => {
   try {
-    const idPersona = req.params.id;
-    const personas = await clienteSqlUser
+    const idProduct = req.params.id;
+    const product = await clienteSql
       .select("*")
-      .from("personas")
-      .where({ id: idPersona });
-    if (personas.length === 0) {
+      .from("products")
+      .where({ id: idProduct });
+    if (product.length === 0) {
       res.status(404).json({ msg: "not found" });
     } else {
-      res.json(personas[0]);
+      res.json(product[0]);
     }
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 });
 
-app.post("/api/personas", async (req, res) => {
+app.post("/api/products", async (req, res) => {
   try {
-    const datosPersona = req.body;
-    const result = await clienteSqlUser.insert(datosPersona).into("personas");
+    const dataProduct = productos;
+    const result = await clienteSql.insert(dataProduct).into("products");
     res.json(result);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 });
 
-app.put("/api/personas/:id", async (req, res) => {
+
+app.put("/api/products/:id", async (req, res) => {
   try {
-    const datosPersona = req.body;
-    const idPersona = req.params.id;
-    await clienteSqlUser
-      .update(datosPersona)
-      .from("personas")
-      .where({ id: idPersona });
+    const dataProduct = productos;
+    const idProduct = productos.id;
+    await clienteSql
+      .update(dataProduct)
+      .from("products")
+      .where({ id: idProduct });
     res.json({ msg: "ok" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 });
 
-app.delete("/api/personas/:id", async (req, res) => {
+app.delete("/api/products/:id", async (req, res) => {
   try {
-    const idPersona = req.params.id;
-    await clienteSqlUser.delete().from("personas").where({ id: idPersona });
+    const idProduct = productos.id;
+    await clienteSql.delete().from("products").where({ id: idProduct });
     res.json({ msg: "ok" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 });
 
-app.listen(8080, () => {
-  console.log("Server running on port 8080");
+
+const port = 8080;
+const server = httpServer.listen(port, () =>
+  console.log(`Listening on port ${port}`)
+);
+server.on("error", (error) => {
+  console.log(error.message);
 });

@@ -1,6 +1,6 @@
 const socket = io();
 
-//------------------------------------------------------------------------------
+//MENSAJES-------------------------------------------------------------------
 
 const mostrarMensajes = (mensajes) => {
   const mensajesParaMostrar = mensajes.map(({ fecha, autor, texto }) => {
@@ -16,32 +16,10 @@ ${mensajesParaMostrar.join("\n")}
   listaMensajes.innerHTML = mensajesHtml;
 }
 
-const mostrarProductos = (productos) => {
-    const productosParaMostrar = productos.map(({ id, title, price, thumbnail }) => {
-        return `<div class="alert alert-primary">Id: <b>${id}</b>, Title: <b>${title}</b>, Price: <b>$${price}</b>, Thumbnail: <b>${thumbnail}</b></div>`;
-    });
-
-    const productosHtml = ` 
-    <ul>
-    ${productosParaMostrar.join("\n")}
-    </ul>`;
-
-    const listaProductos = document.getElementById("listaProductos");
-    listaProductos.innerHTML = productosHtml;
-}
-
-
-//------------------------------------------------------------------------------
-
 socket.on("mensajesActualizados", (mensajes) => {
   mostrarMensajes(mensajes);
 });
 
-socket.on("productosActualizados", (productos) => {
-    mostrarProductos(productos);
-});
-
-//------------------------------------------------------------------------------
 
 const botonEnviarChat = document.getElementById("botonEnviarChat");
 botonEnviarChat.addEventListener("click", () => {
@@ -59,21 +37,41 @@ botonEnviarChat.addEventListener("click", () => {
 });
 
 
+//PRODUCTOS--------------------------------------------------------------------
+
+
+const mostrarProductos = (productos) => {
+  const productosParaMostrar = productos.map(({ title, price, thumbnail }) => {
+      return `<div class="alert alert-primary">Title: <b>${title}</b>, Price: <b>$${price}</b>, Thumbnail: <b>${thumbnail}</b></div>`;
+  });
+
+  const productosHtml = ` 
+  <ul>
+  ${productosParaMostrar.join("\n")}
+  </ul>`;
+
+  const listaProductos = document.getElementById("listaProductos");
+  listaProductos.innerHTML = productosHtml;
+}
+
+socket.on("productosActualizados", (productos) => {
+  mostrarProductos(productos);
+});
+
 const botonEnviarProductos = document.getElementById("botonEnviarProductos");
 botonEnviarProductos.addEventListener("click", () => {
-    const inputId = document.getElementById("inputId");
     const inputTitle = document.getElementById("inputTitle");
     const inputPrice = document.getElementById("inputPrice");
     const inputThumbnail = document.getElementById("inputThumbnail");
-    if (inputId.value && inputTitle.value && inputPrice.value && inputThumbnail.value) {
+    if ( inputTitle.value && inputPrice.value && inputThumbnail.value ) {
         const producto = {
-            id: inputId.value,
             title: inputTitle.value,
             price: inputPrice.value,
             thumbnail: inputThumbnail.value,
         };
         socket.emit("nuevoProducto", producto);
     } else {
-        alert("add a new product");
+        alert("complete all fields");
     }
 });
+

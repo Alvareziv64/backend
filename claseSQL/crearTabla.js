@@ -1,19 +1,21 @@
-const { clienteSqlAdmin } = require('./clienteSql.js')
+const { clienteSql } = require('./clienteSql.js')
 
-try {
-    const exists = await clienteSqlAdmin.schema.hasTable('personas')
-    if (!exists) {
-        await clienteSqlAdmin.schema.createTable('personas', tabla => {
+    clienteSql.schema.hasTable('products')
+    .then(exists => {
+        if (!exists) {
+         clienteSql.schema.createTable('products', tabla => {
             tabla.increments('id'),
-                tabla.string('nombre'),
-                tabla.integer('edad')
+                tabla.string('title'),
+                tabla.integer('price')
+                tabla.string('thumbnail')
         })
-        console.log('tabla "personas" creada!')
+        .then(() => {
+        console.log('Product table created')
+        })
     } else {
-        console.log('la tabla "personas" ya existe. no se realizaron cambios.')
+        console.log('Product table already exists')
     }
-} catch (error) {
-    console.log(`fallo la operacion: ${error.message}`)
-} finally {
-    clienteSqlAdmin.destroy()
-}
+    })
+   .finally(() => {
+    clienteSql.destroy()
+})
