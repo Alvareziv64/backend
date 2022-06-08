@@ -1,8 +1,9 @@
 
-const { knexConfig } = require('./knexConfig.js');
+const { knexConfig, sqliteConfig } = require('./knexConfig.js');
 const crearKnex = require('knex');
 
 
 const clienteSql = crearKnex(knexConfig);
+const clienteSqlite = crearKnex(sqliteConfig);
 
-module.exports = { clienteSql } 
+module.exports = { clienteSql, clienteSqlite }; 

@@ -29,13 +29,36 @@ io.on("connection", (socket) => {
   });
 
   socket.on("nuevoMensaje", (mensaje) => {
-    mensaje.fecha = new Date().toLocaleString();
     mensajes.push(mensaje);
     io.sockets.emit("mensajesActualizados", mensajes);
   }); 
 });  
 
-//knex
+
+//knex chat
+app.get("/api/chat", async (req, res) => {
+  try {
+    const chat = await clienteSqlite.select("*").from("chat");
+    res.json(chat);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const newChat = mensajes;
+    const result = await clienteSqlite.insert(newChat).into("chat");
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+
+
+
+//knex productos
 app.get("/api/products", async (req, res) => {
   try {
     const allProducts = await clienteSql.select("*").from("products");

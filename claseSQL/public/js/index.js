@@ -25,10 +25,12 @@ const botonEnviarChat = document.getElementById("botonEnviarChat");
 botonEnviarChat.addEventListener("click", () => {
   const inputAutor = document.getElementById("inputAutor");
   const inputMensaje = document.getElementById("inputMensaje");
+  const inputFecha = new Date().toLocaleString();
   if (inputAutor.value && inputMensaje.value) {
     const mensaje = {
       autor: inputAutor.value,
       texto: inputMensaje.value,
+      fecha: inputFecha
     };
     socket.emit("nuevoMensaje", mensaje);
   } else {

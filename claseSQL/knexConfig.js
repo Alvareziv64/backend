@@ -13,12 +13,10 @@ const knexConfig = {
     connection: adminDbConfig,
 }
 
-/*function getConfig(modo) {
-    return {
+const sqliteConfig = {
         client: 'sqlite3',
-        connection: { filename: './DB/db.sqlite' },
+        connection: { filename: './database/db.sqlite' },
         useNullAsDefault: true
     } 
-}*/
 
-module.exports =  {knexConfig} ;
+module.exports =  {knexConfig, sqliteConfig };
