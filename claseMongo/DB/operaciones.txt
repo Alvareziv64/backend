@@ -1,0 +1,408 @@
+
+test> db.products.insertMany([{ "id": 1, "title": "Laptop", "price": 2300, "thum
+bnail": "img/laptop.jpg" }, {"id": 2,"title": "Mouse","price": 120,"thumbnail":
+"img/mouse.jpg"},{"id": 3,"title": "Monitor","price": 580,"thumbnail": "img/moni
+tor.jpg"},{"id": 4,"title": "Keyboard","price": 900,"thumbnail": "img/keyboard.j
+pg"},{"id": 5,"title": "Chair","price": 330,"thumbnail": "img/chair.jpg"},{"id":
+ 6,"title": "Headset","price": 1600,"thumbnail": "img/headset.jpg"},{"id": 7,"ti
+tle": "mouse pad","price": 2860,"thumbnail": "img/mousepad.jpg"},{"id": 8,"title
+": "Desk","price": 3200,"thumbnail": "img/desk.jpg"},{"id": 9,"title": "GPU","pr
+ice": 4990,"thumbnail": "img/gpu.jpg"},{"id": 10,"title": "RGB light","price": 4
+320,"thumbnail": "img/rgblight.jpg"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("62a78cad3a541d397c6295aa"),
+    '1': ObjectId("62a78cad3a541d397c6295ab"),
+    '2': ObjectId("62a78cad3a541d397c6295ac"),
+    '3': ObjectId("62a78cad3a541d397c6295ad"),
+    '4': ObjectId("62a78cad3a541d397c6295ae"),
+    '5': ObjectId("62a78cad3a541d397c6295af"),
+    '6': ObjectId("62a78cad3a541d397c6295b0"),
+    '7': ObjectId("62a78cad3a541d397c6295b1"),
+    '8': ObjectId("62a78cad3a541d397c6295b2"),
+    '9': ObjectId("62a78cad3a541d397c6295b3")
+  }
+}
+
+
+test> db.products.find()
+[
+  {
+    _id: ObjectId("62a78cad3a541d397c6295aa"),
+    id: 1,
+    title: 'Laptop',
+    price: 2300,
+    thumbnail: 'img/laptop.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ab"),
+    id: 2,
+    title: 'Mouse',
+    price: 120,
+    thumbnail: 'img/mouse.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ac"),
+    id: 3,
+    title: 'Monitor',
+    price: 580,
+    thumbnail: 'img/monitor.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ad"),
+    id: 4,
+    title: 'Keyboard',
+    price: 900,
+    thumbnail: 'img/keyboard.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ae"),
+    id: 5,
+    title: 'Chair',
+    price: 330,
+    thumbnail: 'img/chair.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295af"),
+    id: 6,
+    title: 'Headset',
+    price: 1600,
+    thumbnail: 'img/headset.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b0"),
+    id: 7,
+    title: 'mouse pad',
+    price: 2860,
+    thumbnail: 'img/mousepad.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b1"),
+    id: 8,
+    title: 'Desk',
+    price: 3200,
+    thumbnail: 'img/desk.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b2"),
+    id: 9,
+    title: 'GPU',
+    price: 4990,
+    thumbnail: 'img/gpu.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b3"),
+    id: 10,
+    title: 'RGB light',
+    price: 4320,
+    thumbnail: 'img/rgblight.jpg'
+  }
+]
+
+
+test> db.createCollection("chat")
+{ ok: 1 }
+
+
+test> db.products.find().count()
+10
+
+
+test> db.products.insertOne({"id":11, "title" : "Joystick", "price" : 1660, "thu
+mbnail" : "img/joystick.jpg"})
+{
+  acknowledged: true,
+  insertedId: ObjectId("62a78fa83a541d397c6295b4")
+}
+
+
+test> db.products.find({price: {$lt: 1000}})
+[
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ab"),
+    id: 2,
+    title: 'Mouse',
+    price: 120,
+    thumbnail: 'img/mouse.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ac"),
+    id: 3,
+    title: 'Monitor',
+    price: 580,
+    thumbnail: 'img/monitor.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ad"),
+    id: 4,
+    title: 'Keyboard',
+    price: 900,
+    thumbnail: 'img/keyboard.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ae"),
+    id: 5,
+    title: 'Chair',
+    price: 330,
+    thumbnail: 'img/chair.jpg'
+  }
+]
+
+
+test> db.products.find({price:{$and:[{$gt: 1000}, {$lt: 300}]}})
+MongoServerError: unknown operator: $and
+test> db.products.find({$and: [{price: {$gt: 1000}}, {price: {$lt: 3000}}]})
+[
+  {
+    _id: ObjectId("62a78cad3a541d397c6295aa"),
+    id: 1,
+    title: 'Laptop',
+    price: 2300,
+    thumbnail: 'img/laptop.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295af"),
+    id: 6,
+    title: 'Headset',
+    price: 1600,
+    thumbnail: 'img/headset.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b0"),
+    id: 7,
+    title: 'mouse pad',
+    price: 2860,
+    thumbnail: 'img/mousepad.jpg'
+  },
+  {
+    _id: ObjectId("62a78fa83a541d397c6295b4"),
+    id: 11,
+    title: 'Joystick',
+    price: 1660,
+    thumbnail: 'img/joystick.jpg'
+  }
+]
+
+
+test> db.products.find({price:{$gt:3000}})
+[
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b1"),
+    id: 8,
+    title: 'Desk',
+    price: 3200,
+    thumbnail: 'img/desk.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b2"),
+    id: 9,
+    title: 'GPU',
+    price: 4990,
+    thumbnail: 'img/gpu.jpg'
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b3"),
+    id: 10,
+    title: 'RGB light',
+    price: 4320,
+    thumbnail: 'img/rgblight.jpg'
+  }
+]
+
+
+test> db.products.find({}, {title:1, _id:0})
+[
+  { title: 'Laptop' },
+  { title: 'Mouse' },
+  { title: 'Monitor' },
+  { title: 'Keyboard' },
+  { title: 'Chair' },
+  { title: 'Headset' },
+  { title: 'mouse pad' },
+  { title: 'Desk' },
+  { title: 'GPU' },
+  { title: 'RGB light' },
+  { title: 'Joystick' }
+]
+test> db.products.find({}, {title:1, _id:0}).sort({price:1})
+[
+  { title: 'Mouse' },
+  { title: 'Chair' },
+  { title: 'Monitor' },
+  { title: 'Keyboard' },
+  { title: 'Headset' },
+  { title: 'Joystick' },
+  { title: 'Laptop' },
+  { title: 'mouse pad' },
+  { title: 'Desk' },
+  { title: 'RGB light' },
+  { title: 'GPU' }
+]
+
+test>  db.products.find({}, {title:1, _id:0}).sort({price:1}).skip(2).limit(1)
+[ { title: 'Monitor' } ]
+
+
+test> db.products.updateMany({},{$set:{stock : 100}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 11,
+  modifiedCount: 11,
+  upsertedCount: 0
+}
+test> db.products.find()
+[
+  {
+    _id: ObjectId("62a78cad3a541d397c6295aa"),
+    id: 1,
+    title: 'Laptop',
+    price: 2300,
+    thumbnail: 'img/laptop.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ab"),
+    id: 2,
+    title: 'Mouse',
+    price: 120,
+    thumbnail: 'img/mouse.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ac"),
+    id: 3,
+    title: 'Monitor',
+    price: 580,
+    thumbnail: 'img/monitor.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ad"),
+    id: 4,
+    title: 'Keyboard',
+    price: 900,
+    thumbnail: 'img/keyboard.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295ae"),
+    id: 5,
+    title: 'Chair',
+    price: 330,
+    thumbnail: 'img/chair.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295af"),
+    id: 6,
+    title: 'Headset',
+    price: 1600,
+    thumbnail: 'img/headset.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b0"),
+    id: 7,
+    title: 'mouse pad',
+    price: 2860,
+    thumbnail: 'img/mousepad.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b1"),
+    id: 8,
+    title: 'Desk',
+    price: 3200,
+    thumbnail: 'img/desk.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b2"),
+    id: 9,
+    title: 'GPU',
+    price: 4990,
+    thumbnail: 'img/gpu.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b3"),
+    id: 10,
+    title: 'RGB light',
+    price: 4320,
+    thumbnail: 'img/rgblight.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78fa83a541d397c6295b4"),
+    id: 11,
+    title: 'Joystick',
+    price: 1660,
+    thumbnail: 'img/joystick.jpg',
+    stock: 100
+  }
+]
+test> db.products.updateMany({price:{$gt:4000}}, {$set:{price : 0}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+
+
+test> db.products.deleteMany({price : {$lt: 1000}})
+{ acknowledged: true, deletedCount: 6 }
+test> db.products.find()
+[
+  {
+    _id: ObjectId("62a78cad3a541d397c6295aa"),
+    id: 1,
+    title: 'Laptop',
+    price: 2300,
+    thumbnail: 'img/laptop.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295af"),
+    id: 6,
+    title: 'Headset',
+    price: 1600,
+    thumbnail: 'img/headset.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b0"),
+    id: 7,
+    title: 'mouse pad',
+    price: 2860,
+    thumbnail: 'img/mousepad.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78cad3a541d397c6295b1"),
+    id: 8,
+    title: 'Desk',
+    price: 3200,
+    thumbnail: 'img/desk.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("62a78fa83a541d397c6295b4"),
+    id: 11,
+    title: 'Joystick',
+    price: 1660,
+    thumbnail: 'img/joystick.jpg',
+    stock: 100
+  }
+]
+test> show dbs
+admin   100.00 KiB
+config  108.00 KiB
+local    72.00 KiB
+test     80.00 KiB
+test> db.createUser({user: "pepe",pwd: "asd456",roles: [{ role: "read", db: "test" }]})
+{ ok: 1 }
+test>
