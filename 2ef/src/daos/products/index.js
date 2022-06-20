@@ -9,11 +9,11 @@ switch (config.MODO_PERSISTENCIA) {
         break
     case 'firebase':
         const { default: ProductsDaoFirebase } = await import('./productsDaoFirebase.js')
-        personasDao = new ProductsDaoFirebase()
+        productsDao = new ProductsDaoFirebase()
         break
     case 'mongodb':
         const { default: ProductsDaoMongo } = await import('./productsDaoMongo.js')
-        personasDao = new ProductsDaoMongo()
+        productsDao = new ProductsDaoMongo()
         break
 }
 

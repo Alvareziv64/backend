@@ -1,9 +1,16 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 import config from '../config.js';
 
-await MongoClient.connect(config.mongodb.cnxStr, config.mongodb.options);
+const uri = config.mongodb.cnxStr;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+    if (err) {
+        console.log(err);
+    };
+});
 
-const db = mongo.db();
+
+const db = client.db(config.mongodb.dbName);
 
 class mongoContainer {
     constructor (nombreColeccion) {

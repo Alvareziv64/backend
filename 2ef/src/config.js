@@ -7,13 +7,15 @@ export default {
     },
 
     mongodb: {
-        cnxStr: 'mongodb+srv://admin:mongopassword123@cluster0.xooqlno.mongodb.net/?retryWrites=true&w=majority',
+        cnxStr: "mongodb+srv://admin:mongopassword123@cluster0.xooqlno.mongodb.net/?retryWrites=true&w=majority",
         options: {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
             serverSelectionTimeoutMS: 5000,
-        }
+        },
+        dbname: 'Cluster0'
+        
     },
 
     firebase: {
