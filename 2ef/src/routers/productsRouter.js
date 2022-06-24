@@ -1,16 +1,24 @@
 import { Router } from 'express';
 import { productsDao } from '../daos/products/index.js'
 
-const productsRouter = Router()
+const productsRouter = Router();
 
 const productsControllerGet = async (req, res) => {
-    const products = await productsDao.getAll();
-    res.json(products);
+    try{
+        const products = await productsDao.get();
+        res.json(products);
+    } catch(err){
+        res.status(500).json({ message: err.message });
+    }
 };
 
 const productsControllerGetById = async (req, res) => {
+    try{
     const product = await productsDao.getById(req.params.id);
     res.json(product);
+    } catch(err){
+        res.status(500).json({ message: err.message });
+    }
 };
 
 productsRouter.get('/', productsControllerGet)

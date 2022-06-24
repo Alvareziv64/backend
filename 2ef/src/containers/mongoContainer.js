@@ -36,12 +36,13 @@ class mongoContainer {
 
     async getById(id) {
         try {
-            const doc = await this.coleccion.findOne({id:(id)})
+            const doc = this.coleccion.findOne({id:Number(id)})
             return doc
         } catch (error) {
             throw new Error(error.message)
         }
     }
+
 
     async setById(id, data) {
         try {

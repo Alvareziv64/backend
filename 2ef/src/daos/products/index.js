@@ -5,7 +5,7 @@ let productsDao
 switch (config.MODO_PERSISTENCIA) {
     case 'json':
         const { default: ProductsDaoArchivo } = await import('./productsDaoArchivo.js')
-        prodcutsDao = new ProductsDaoArchivo(config.fileSystem.path)
+        productsDao = new ProductsDaoArchivo(config.fileSystem.path)
         break
     case 'firebase':
         const { default: ProductsDaoFirebase } = await import('./productsDaoFirebase.js')
