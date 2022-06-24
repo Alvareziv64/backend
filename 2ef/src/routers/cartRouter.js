@@ -17,9 +17,15 @@ cartRouter.get('/', cartControllerGet)
 cartRouter.get('/:id', cartControllerGetById)
 
 cartRouter.post('/', async (req, res) => {
-    const prodAgregado = await cartDao.createCart(req.body);
+    const prodAgregado = await cartDao.createCart();
     res.json(prodAgregado)
 })
+
+cartRouter.post('/:id', async (req, res) => {
+    const prodAgregado = await cartDao.postProductsInCart(req.params.id, req.body);
+    res.json(prodAgregado)
+    }
+)
 
 cartRouter.put('/:id', async (req, res) => {
     const prodActualizado = await cartDao.putProductInCart(req.body);
