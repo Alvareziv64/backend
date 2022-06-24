@@ -5,7 +5,7 @@ const productsRouter = Router();
 
 const productsControllerGet = async (req, res) => {
     try{
-        const products = await productsDao.get();
+        const products = await productsDao.getAll();
         res.json(products);
     } catch(err){
         res.status(500).json({ message: err.message });
