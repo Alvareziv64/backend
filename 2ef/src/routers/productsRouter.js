@@ -21,22 +21,28 @@ const productsControllerGetById = async (req, res) => {
     }
 };
 
-productsRouter.get('/', productsControllerGet)
-productsRouter.get('/:id', productsControllerGetById)
-
-productsRouter.post('/', async (req, res) => {
+const productsControllerPost = async (req, res) => {
     const prodAgregado = await productsDao.save(req.body);
     res.json(prodAgregado)
-})
+}
 
-productsRouter.put('/:id', async (req, res) => {
-    const prodActualizado = await productsDao.setById(req.body);
+const productsControllerPut = async (req, res) => {
+    const prodActualizado = await productsDao.setById(req.params.id, req.body);
     res.json(prodActualizado)
-})
+}
 
-productsRouter.delete('/:id', async (req, res) => {
+const productsControllerDelete = async (req, res) => {
     const prodEliminado = await productsDao.deleteById(req.params.id);
     res.json(prodEliminado)
-})
+}
+
+
+productsRouter.get('/', productsControllerGet)
+productsRouter.get('/:id', productsControllerGetById)
+productsRouter.post('/', productsControllerPost)
+productsRouter.put('/:id', productsControllerPut)
+productsRouter.delete('/:id', productsControllerDelete)
+
+
 
 export { productsRouter }

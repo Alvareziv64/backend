@@ -46,7 +46,7 @@ class mongoContainer {
 
     async setById(id, data) {
         try {
-            await this.coleccion.updateOne({id:(id)}, {$set: data})
+            await this.coleccion.updateOne({id:Number(id)}, {$set: (data)})
         } catch (error) {
             throw new Error(error.message)
         }
@@ -54,7 +54,7 @@ class mongoContainer {
 
     async deleteById(id) {
         try {
-            await this.coleccion.deleteOne({id:(id)})
+            await this.coleccion.deleteOne({id : Number(id)})
         } catch (error) {
             throw new Error(error.message)
         }
@@ -81,9 +81,9 @@ class mongoContainer {
         }
     }
 
-    async postProductsInCart(cartId, id, title, price, thumbnail) {
+    async postProductsInCart(cartId, reqBody) {
         try {
-            await this.coleccion.updateOne({id:(cartId)}, {$push: {items: {id, title, price, thumbnail}}})
+            await this.coleccion.updateOne({id:(cartId)}, {$push: {items: (reqBody)}})
         } catch (error) {
             throw new Error(error.message)
         }
@@ -98,9 +98,9 @@ class mongoContainer {
         }
     }
 
-    async putProductsInCart(cartId, id, title, price, thumbnail) {
+    async putProductsInCart(cartId, reqBody) {
         try {
-            await this.coleccion.updateOne({id:(cartId)}, {$set: {items: {id, title, price, thumbnail}}})
+            await this.coleccion.updateOne({id:(cartId)}, {$set: {items: [(reqBody)]}})
         } catch (error) {
             throw new Error(error.message)
         }

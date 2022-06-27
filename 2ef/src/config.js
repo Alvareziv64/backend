@@ -19,9 +19,9 @@ export default {
     },
 
     firebase: {
-         serviceAccount : JSON.parse(fs.readFileSync("../DB/coder-backend-b4f2e-firebase-adminsdk-6snu5-a80df12aee.json"))
+         serviceAccount : JSON.parse(fs.readFileSync("../DB/coder-backend-b4f2e-firebase-adminsdk-6snu5-a80df12aee.json")),
 
     },
-    MODO_PERSISTENCIA: 'mongodb'
+    MODO_PERSISTENCIA: 'fileSystem',
 }
 

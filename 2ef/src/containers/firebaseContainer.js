@@ -6,6 +6,8 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+const randomId = Date.now();
+const cartCreate = [];
 
 class firebaseContainer {
   constructor(nombreColeccion) {
@@ -31,8 +33,8 @@ class firebaseContainer {
 
   async getById(id) {
     try {
-      const doc = await this.coleccion.doc(id).get();
-      return doc.data();
+      const docs = await this.coleccion.where("id", "==", Number(id)).get();
+      return docs.docs.map((d) => d.data());
     } catch (error) {
       throw new Error(error.message);
     }
@@ -40,7 +42,9 @@ class firebaseContainer {
 
   async setById(id, data) {
     try {
-      await this.coleccion.doc(id).set(data);
+      const docs = await this.coleccion.where("id", "==", Number(id)).get();
+      const doc = docs.docs[0];
+      await doc.ref.update(data);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -48,12 +52,15 @@ class firebaseContainer {
 
   async deleteById(id) {
     try {
-      await this.coleccion.doc(id).delete();
+      const docs = await this.coleccion.where("id", "==", Number(id)).get();
+      const doc = docs.docs[0];
+      await doc.ref.delete();
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
+  /*
   async deleteAll() {
     try {
       const docs = await this.listarAll();
@@ -63,30 +70,30 @@ class firebaseContainer {
     } catch (error) {
       throw new Error(`Error al borrar: ${error}`);
     }
-  }
+  }*/
 
-  // Cart Logic
+  // Cart Logic --------------------------------------------------------------
 
   async createCart() {
     try {
-      await this.collection().add({
+      const cart = {
+        id: randomId,
         items: [],
-      });
+      };
+      await this.save(cart);
+      return cart;
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  async postProductsInCart(cartId, id, title, price, thumbnail) {
+  async postProductsInCart(cartId, reqBody) {
     try {
-      const cart = await this.getById(cartId);
-      cart.items.push({
-        id,
-        title,
-        price,
-        thumbnail,
+      const docs = await this.coleccion.where("id", "==", Number(cartId)).get();
+      const doc = docs.docs[0];
+      await doc.ref.update({
+        items: [...doc.data().items, reqBody],
       });
-      await this.setById(cartId, cart);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -94,21 +101,21 @@ class firebaseContainer {
 
   async getProductsInCart(id) {
     try {
-      const cart = await this.getById(id);
-      return cart.items;
+      const docs = await this.coleccion.where("id", "==", Number(id)).get();
+      const doc = docs.docs[0];
+      return doc.data().items;
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  async putProductsInCart(cartId, id, title, price, thumbnail) {
+  async putProductsInCart(cartId, reqBody) {
     try {
-      const cart = await this.getById(cartId);
-      const item = cart.items.find((i) => i.id === id);
-      item.title = title;
-      item.price = price;
-      item.thumbnail = thumbnail;
-      await this.setById(cartId, cart);
+      const docs = await this.coleccion.where("id", "==", Number(cartId)).get();
+      const doc = docs.docs[0];
+      await doc.ref.update({
+        items: reqBody,
+      });
     } catch (error) {
       throw new Error(error.message);
     }
@@ -116,10 +123,13 @@ class firebaseContainer {
 
   async deleteProductInCart(cartId, productId) {
     try {
-      const cart = await this.getById(cartId);
-      const index = cart.items.findIndex((i) => i.id === productId);
-      cart.items.splice(index, 1);
-      await this.setById(cartId, cart);
+      const docs = await this.coleccion.where("id", "==", Number(cartId)).get(); 
+      const doc = docs.docs[0];
+      const items = doc.data().items;
+      const newItems = items.filter((item) => item.id !== productId);
+      await doc.ref.update({
+        items: newItems,
+      });
     } catch (error) {
       throw new Error(error.message);
     }
@@ -127,9 +137,11 @@ class firebaseContainer {
 
   async deleteProductsInCart(cartId) {
     try {
-      const cart = await this.getById(cartId);
-      cart.items = [];
-      await this.setById(cartId, cart);
+      const docs = await this.coleccion.where("id", "==", Number(cartId)).get();
+      const doc = docs.docs[0];
+      await doc.ref.update({
+        items: [],
+      });
     } catch (error) {
       throw new Error(error.message);
     }
