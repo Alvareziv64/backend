@@ -2,9 +2,36 @@ const socket = io();
 
 //MENSAJES-------------------------------------------------------------------
 
+const botonEnviarChat = document.getElementById("botonEnviarChat");
+botonEnviarChat.addEventListener("click", () => {
+  const inputEmail = document.getElementById("inputEmail");
+  const inputNombre = document.getElementById("inputNombre");
+  const inputApellido = document.getElementById("inputApellido");
+  const inputEdad = document.getElementById("inputEdad");
+  const inputAlias = document.getElementById("inputAlias");
+  const inputAvatar = document.getElementById("inputAvatar");
+  const inputMensaje = document.getElementById("inputMensaje");
+  if (inputEmail.value && inputMensaje.value) {
+    const mensaje = {
+      author: {
+        email: inputEmail.value,
+        nombre: inputNombre.value,
+        apellido: inputApellido.value,
+        edad: inputEdad.value,
+        alias: inputAlias.value,
+        avatar: inputAvatar.value
+      },
+      comments: inputMensaje.value,
+      }
+    socket.emit("nuevoMensaje", mensaje);
+  } else {
+    alert("insert a message");
+  }
+});
+
 const mostrarMensajes = (mensajes) => {
-  const mensajesParaMostrar = mensajes.map(({ fecha, autor, texto }) => {
-    return `<div class="alert alert-primary"> <b>${autor}:</b> ${texto} - (${fecha})</div>`;
+  const mensajesParaMostrar = mensajes.map(({ author, comments }) => {
+    return `<div class="alert alert-primary"> <b>Author: ${author.email}</b>: ${comments}</div>`;
   });
 
   const mensajesHtml = `
@@ -21,22 +48,6 @@ socket.on("mensajesActualizados", (mensajes) => {
 });
 
 
-const botonEnviarChat = document.getElementById("botonEnviarChat");
-botonEnviarChat.addEventListener("click", () => {
-  const inputAutor = document.getElementById("inputAutor");
-  const inputMensaje = document.getElementById("inputMensaje");
-  const inputFecha = new Date().toLocaleString();
-  if (inputAutor.value && inputMensaje.value) {
-    const mensaje = {
-      autor: inputAutor.value,
-      texto: inputMensaje.value,
-      fecha: inputFecha
-    };
-    socket.emit("nuevoMensaje", mensaje);
-  } else {
-    alert("insert a message");
-  }
-});
 
 
 //PRODUCTOS--------------------------------------------------------------------

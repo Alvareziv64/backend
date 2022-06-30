@@ -10,7 +10,10 @@
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
       crossorigin="anonymous"
     />
+    ">
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js
+    "></script>
     <title>Document</title>
   </head>
   <body class="container">
@@ -23,9 +26,15 @@
         <button id="botonEnviarProductos"  class="btn btn-success mb-3">Add</button>
         <div id="listaProductos" style="max-width: 500px"></div>
       </div>
+      <!-- ------------CHAT------------ -->
     <div class="jumbotron mt-3">
       <h1>Chat</h1>
-      <input id="inputAutor" class="form-control" style="max-width: 300px" type="text" placeholder="Autor" />
+      <input id="inputEmail" class="form-control" style="max-width: 300px" type="text" placeholder="Email" />
+      <input id="inputNombre" class="form-control" style="max-width: 300px" type="text" placeholder="Nombre" />
+      <input id="inputApellido" class="form-control" style="max-width: 300px" type="text" placeholder="Apellido" />
+      <input id="inputEdad" class="form-control" style="max-width: 300px" type="text" placeholder="Edad" />
+      <input id="inputAlias" class="form-control" style="max-width: 300px" type="text" placeholder="Alias" />
+      <input id="inputAvatar" class="form-control" style="max-width: 300px" type="text" placeholder="Avatar" />
       <input id="inputMensaje" class="form-control" style="max-width: 300px" type="text" placeholder="Mensaje" />
       <button id="botonEnviarChat"  class="btn btn-success mb-3">Send</button>
       <div id="listaMensajes" style="max-width: 500px"></div>

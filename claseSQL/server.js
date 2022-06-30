@@ -1,13 +1,28 @@
-const express = require("express");
-const { clienteSql } = require("./clienteSql.js") ;
-const { Server: HttpServer } = require("http");
-const { Server: IOServer } = require("socket.io");
+import express from "express";
+import { Server as HttpServer } from "http";
+import { Server as IOServer } from "socket.io";
+import { normalize, denormalize, schema } from "normalizr";
 
 const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
+
+
 app.use(express.json());
 app.use(express.static("public"));
+
+
+//mock products
+import ApiProductsMock from "./api/products.js";
+const apiProducts = new ApiProductsMock();
+
+app.get("/api/products-test", async (req, res) => {
+  try {
+    res.json(await apiProducts.create());
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 //vista inicio
 app.get("/", (req, res) => {
@@ -19,19 +34,38 @@ const productos = [];
 //Chat
 const mensajes = [];
 
+//NORMALIZR
+// Definimos un esquema de usuarios (autores y comentadores)
+const authorSchema = new schema.Entity('author', {}, { idAttribute: 'email' });
+// Definimos un esquema de comentadores
+const commentSchema = new schema.Entity('comments')
+
+// Definimos un esquema de artículos
+const postSchema = new schema.Entity('posts', {
+  author: authorSchema,
+  comments: [commentSchema]
+});
+
+
 //socket.io
 io.on("connection", (socket) => {
-  socket.emit("mensajesActualizados", mensajes);
+ 
+  socket.on("nuevoMensaje", (mensaje) => {
+    const normalizedMensaje = normalize(mensaje, postSchema);
+    mensajes.push(normalizedMensaje);
+    io.sockets.emit("mensajesActualizados", mensajes);
+  });  
+
+ const denormalizedMensaje = denormalize(mensajes.result, postSchema, mensajes.entities);
+  socket.emit("mensajesActualizados", denormalizedMensaje);
+
 
   socket.on("nuevoProducto", (producto) => {
     productos.push(producto);
     io.emit("productosActualizados", productos);
   });
 
-  socket.on("nuevoMensaje", (mensaje) => {
-    mensajes.push(mensaje);
-    io.sockets.emit("mensajesActualizados", mensajes);
-  }); 
+
 });  
 
 
@@ -49,7 +83,7 @@ app.post("/api/chat", async (req, res) => {
   try {
     const newChat = mensajes;
     const result = await clienteSqlite.insert(newChat).into("chat");
-    res.json(result);
+    res.json(result); 
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -58,7 +92,8 @@ app.post("/api/chat", async (req, res) => {
 
 
 
-//knex productos
+//knex productoss
+
 app.get("/api/products", async (req, res) => {
   try {
     const allProducts = await clienteSql.select("*").from("products");

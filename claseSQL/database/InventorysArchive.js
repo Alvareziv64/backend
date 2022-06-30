@@ -1,5 +1,4 @@
-const fs = require("fs");
-
+import fs from 'fs';
 class InventorysArchive {
   constructor(path) {
     this.path = `databases/${path}`;
@@ -121,4 +120,4 @@ class InventorysArchive {
   }
 }
 
-module.exports = { InventorysArchive };
+export default InventorysArchive;
