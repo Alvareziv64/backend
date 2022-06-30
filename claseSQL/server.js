@@ -2,6 +2,11 @@ import express from "express";
 import { Server as HttpServer } from "http";
 import { Server as IOServer } from "socket.io";
 import { normalize, denormalize, schema } from "normalizr";
+import util from 'util';
+
+function print(objeto) {
+  console.log(util.inspect(objeto, false, 12, true))
+}
 
 const app = express();
 const httpServer = new HttpServer(app);
@@ -32,32 +37,48 @@ app.get("/", (req, res) => {
 //Productos
 const productos = [];
 //Chat
+
+
 const mensajes = [];
 
+print(mensajes)
+console.log(JSON.stringify(mensajes).length)
+
 //NORMALIZR
-// Definimos un esquema de usuarios (autores y comentadores)
+
+// author schema where we use email as id
 const authorSchema = new schema.Entity('author', {}, { idAttribute: 'email' });
-// Definimos un esquema de comentadores
+
+// Definimos un esquema de comentarios
 const commentSchema = new schema.Entity('comments')
 
 // Definimos un esquema de artículos
-const postSchema = new schema.Entity('posts', {
+
+
+const postSchema = new schema.Entity('mensajes', {
   author: authorSchema,
-  comments: [commentSchema]
+  comments: commentSchema
 });
+
+const normalized = normalize(mensajes, postSchema); // Normalizamos los datos
+
+print(normalized)
+console.log(JSON.stringify(normalized).length)
+
+//const denormalized = denormalize(normalized.result, postSchema, normalized.entities);
+
+//print(denormalized)
+//console.log(JSON.stringify(denormalized).length)
 
 
 //socket.io
 io.on("connection", (socket) => {
  
   socket.on("nuevoMensaje", (mensaje) => {
-    const normalizedMensaje = normalize(mensaje, postSchema);
-    mensajes.push(normalizedMensaje);
+    mensajes.push(mensaje); 
     io.sockets.emit("mensajesActualizados", mensajes);
   });  
-
- const denormalizedMensaje = denormalize(mensajes.result, postSchema, mensajes.entities);
-  socket.emit("mensajesActualizados", denormalizedMensaje);
+  socket.emit("mensajesActualizados", mensajes);
 
 
   socket.on("nuevoProducto", (producto) => {
