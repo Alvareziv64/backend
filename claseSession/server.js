@@ -3,7 +3,9 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
 
-const app = express()
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     store: MongoStore.create({
@@ -19,29 +21,23 @@ app.use(session({
 }))
 
 app.get('/', (req, res) => {
-    res.send('Servidor express ok!')
-})
-
-let contador = 0
-app.get('/sin-session', (req, res) => {
-    res.send({ contador: ++contador })
-})
-
-app.get('/con-session', (req, res) => {
-    if (req.session.contador) {
-        req.session.contador++
-        res.send(`Ud ha visitado el sitio ${req.session.contador} veces.`)
+    if (req.session.user && req.session.user.name) {
+        res.send(`Welcome ${req.session.user.name}`)
     } else {
-        req.session.contador = 1
-        res.send('Bienvenido!')
+        res.send('Please login')
     }
 })
 
+app.get('/login/:name', (req, res) => {
+    req.session.user = { name: req.params.name }
+    res.send(`Login successful, welcome ${req.session.user.name}`)
+}
+)
+
+
 app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (!err) res.send('Logout ok!')
-        else res.send({ status: 'Logout ERROR', body: err })
-    })
+    req.session.destroy()
+    res.redirect('/')
 })
 
 
@@ -49,3 +45,10 @@ const PORT = 8080
 app.listen(PORT, () => {
     console.log(`Servidor express escuchando en el puerto ${PORT}`)
 })
+
+
+/*app.post('/login', (req, res) => {
+    req.session.user = req.body 
+    res.send(`You are logged in, welcome ${req.body.name}`)
+})
+*/
